@@ -92,8 +92,14 @@ export default function MusicPlayer() {
     const audio = audioRef.current;
     if (!audio) return;
     const wasPlaying = isPlaying;
+    if (wasPlaying) {
+      const handler = () => {
+        audio.play().catch(() => {});
+        audio.removeEventListener('canplay', handler);
+      };
+      audio.addEventListener('canplay', handler);
+    }
     audio.load();
-    if (wasPlaying) audio.play().catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trackIdx]);
 
@@ -128,7 +134,7 @@ export default function MusicPlayer() {
         className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full flex items-center justify-center"
         style={{
           background: isPlaying
-            ? 'linear-gradient(135deg, #C9A84C, #F0D060)'
+            ? 'linear-gradient(135deg, var(--color-accent), var(--color-accent-light))'
             : 'rgba(201,168,76,0.15)',
           border: '1px solid rgba(201,168,76,0.5)',
           boxShadow: isPlaying ? '0 0 24px rgba(201,168,76,0.5)' : '0 4px 16px rgba(0,0,0,0.5)',
@@ -173,7 +179,7 @@ export default function MusicPlayer() {
               {TRACKS.map((t, i) => (
                 <button
                   key={i}
-                  onClick={() => { setTrackIdx(i); const a = audioRef.current; if (a) { a.load(); a.play().then(() => setIsPlaying(true)).catch(() => {}); } }}
+                  onClick={() => { setTrackIdx(i); const a = audioRef.current; if (a) { const h = () => { a.play().then(() => setIsPlaying(true)).catch(() => {}); a.removeEventListener('canplay', h); }; a.addEventListener('canplay', h); a.load(); } }}
                   className="w-full flex items-center gap-2 px-2 py-1.5 rounded-sm text-left transition-all duration-200"
                   style={{
                     background: i === trackIdx ? 'rgba(201,168,76,0.12)' : 'transparent',
@@ -194,7 +200,7 @@ export default function MusicPlayer() {
                   ) : (
                     <div className="w-3 h-3 flex items-center justify-center">
                       <div className="w-1.5 h-1.5 rounded-full"
-                        style={{ background: i === trackIdx ? '#C9A84C' : 'rgba(255,255,255,0.2)' }} />
+                        style={{ background: i === trackIdx ? 'var(--color-accent)' : 'rgba(255,255,255,0.2)' }} />
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
@@ -216,7 +222,7 @@ export default function MusicPlayer() {
                 <motion.div
                   className="h-full rounded-full"
                   style={{
-                    background: 'linear-gradient(90deg, #C9A84C, #F0D060)',
+                    background: 'linear-gradient(90deg, var(--color-accent), var(--color-accent-light))',
                     width: `${progress * 100}%`,
                   }}
                 />
@@ -232,7 +238,7 @@ export default function MusicPlayer() {
               <button
                 onClick={togglePlay}
                 className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300"
-                style={{ background: 'linear-gradient(135deg, #C9A84C, #F0D060)' }}
+                style={{ background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent-light))' }}
                 aria-label={isPlaying ? 'Pause' : 'Play'}
               >
                 {isPlaying ? <Pause size={14} className="text-luxury-black" /> : <Play size={14} className="text-luxury-black ml-0.5" />}
@@ -260,7 +266,7 @@ export default function MusicPlayer() {
                   onChange={e => { setVolume(Number(e.target.value)); setIsMuted(false); }}
                   className="w-14 accent-gold"
                   aria-label="Volume"
-                  style={{ accentColor: '#C9A84C' }}
+                  style={{ accentColor: 'var(--color-accent)' }}
                 />
               </div>
             </div>

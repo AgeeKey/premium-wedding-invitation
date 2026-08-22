@@ -195,7 +195,7 @@ export default function Gallery() {
                 </button>
                 <button
                   onClick={() => navPhoto(1)}
-                  className="absolute right-12 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center"
                   style={{ background: 'rgba(201,168,76,0.2)', border: '1px solid rgba(201,168,76,0.4)' }}
                   aria-label="Next photo"
                 >

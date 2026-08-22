@@ -1,3 +1,5 @@
+import { useId } from 'react';
+
 /**
  * Kyrgyz traditional ornament components inspired by "kochkor" (ram-horn) and
  * "iri kochkor" geometric motifs found on shyrdaks and felt rugs.
@@ -9,13 +11,17 @@ interface OrnamentProps {
   opacity?: number;
 }
 
+const ACCENT = 'var(--color-accent)';
+
 /** Horizontal border strip with repeating kochkor motif */
-export function KyrgyzBorder({ className = '', color = '#C9A84C', opacity = 0.5 }: OrnamentProps) {
+export function KyrgyzBorder({ className = '', color = ACCENT, opacity = 0.5 }: OrnamentProps) {
+  const id = useId();
+  const patternId = `kochkor-${id.replace(/:/g, '')}`;
   return (
     <div className={`w-full overflow-hidden ${className}`} style={{ opacity }}>
       <svg viewBox="0 0 400 32" preserveAspectRatio="xMidYMid meet" className="w-full h-8">
         <defs>
-          <pattern id="kochkor-border" x="0" y="0" width="40" height="32" patternUnits="userSpaceOnUse">
+          <pattern id={patternId} x="0" y="0" width="40" height="32" patternUnits="userSpaceOnUse">
             <path
               d="M4 16 C4 8, 12 4, 16 8 C20 12, 20 20, 16 24 C12 28, 4 24, 4 16 Z"
               fill="none" stroke={color} strokeWidth="1.2"
@@ -28,7 +34,7 @@ export function KyrgyzBorder({ className = '', color = '#C9A84C', opacity = 0.5 
             <path d="M2 30 L38 30" stroke={color} strokeWidth="0.6" />
           </pattern>
         </defs>
-        <rect width="400" height="32" fill="url(#kochkor-border)" />
+        <rect width="400" height="32" fill={`url(#${patternId})`} />
       </svg>
     </div>
   );
@@ -37,7 +43,7 @@ export function KyrgyzBorder({ className = '', color = '#C9A84C', opacity = 0.5 
 /** Corner ornament: geometric Kyrgyz frame corner */
 export function KyrgyzCorner({
   className = '',
-  color = '#C9A84C',
+  color = ACCENT,
   opacity = 0.4,
   flip = false,
 }: OrnamentProps & { flip?: boolean }) {
@@ -60,7 +66,7 @@ export function KyrgyzCorner({
 }
 
 /** Horizontal divider with central diamond and kochkor wings */
-export function KyrgyzDivider({ className = '', color = '#C9A84C' }: { className?: string; color?: string }) {
+export function KyrgyzDivider({ className = '', color = ACCENT }: { className?: string; color?: string }) {
   return (
     <div className={`flex items-center gap-3 ${className}`}>
       <div className="flex-1 h-px" style={{ background: `linear-gradient(90deg, transparent, ${color}40, ${color}80)` }} />
@@ -80,7 +86,7 @@ export function KyrgyzDivider({ className = '', color = '#C9A84C' }: { className
 }
 
 /** Floating decorative element – a single stylised kochkor rosette */
-export function KyrgyzRosette({ size = 40, color = '#C9A84C', opacity = 0.3 }: { size?: number; color?: string; opacity?: number }) {
+export function KyrgyzRosette({ size = 40, color = ACCENT, opacity = 0.3 }: { size?: number; color?: string; opacity?: number }) {
   const petals = [0, 45, 90, 135, 180, 225, 270, 315];
   return (
     <svg viewBox="0 0 40 40" width={size} height={size} fill="none" style={{ opacity }}>
