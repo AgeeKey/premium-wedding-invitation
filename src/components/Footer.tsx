@@ -1,9 +1,15 @@
 import { motion } from 'framer-motion';
 import { Heart } from 'lucide-react';
+import { KyrgyzDivider, KyrgyzBorder } from './KyrgyzOrnament';
 
 export default function Footer() {
   return (
     <footer className="relative py-20 px-6 overflow-hidden border-t border-white/5">
+      {/* Kyrgyz top border */}
+      <div className="absolute top-0 left-0 right-0 pointer-events-none">
+        <KyrgyzBorder opacity={0.2} />
+      </div>
+
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] rounded-full bg-gold/4 blur-[80px]" />
@@ -39,15 +45,26 @@ export default function Footer() {
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1 }}
-          className="section-divider mb-8"
-        />
+        >
+          <KyrgyzDivider className="mb-8" />
+        </motion.div>
 
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.2 }}
-          className="font-serif italic text-white/30 text-base mb-8 leading-relaxed"
+          className="font-serif italic text-white/30 text-base mb-3 leading-relaxed"
+        >
+          «Сүйүү — мәңгүлүктүн башы»
+        </motion.p>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="font-serif italic text-white/20 text-sm mb-8 leading-relaxed"
         >
           «Счастье не в том, чтобы делать всегда, что хочешь,<br />
           а в том, чтобы всегда хотеть того, что делаешь.»
@@ -67,7 +84,7 @@ export default function Footer() {
           >
             <Heart size={12} className="text-gold/50 fill-gold/50" />
           </motion.span>
-          <span>для нашего особого дня</span>
+          <span>· Жүрөктөн жасалды</span>
         </motion.div>
 
         {/* Decorative bottom */}
@@ -91,3 +108,4 @@ export default function Footer() {
     </footer>
   );
 }
+

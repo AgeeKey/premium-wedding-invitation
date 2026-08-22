@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { KyrgyzDivider, KyrgyzCorner, KyrgyzRosette } from './KyrgyzOrnament';
 
 export default function Header() {
   const ref = useRef<HTMLElement>(null);
@@ -23,55 +24,61 @@ export default function Header() {
         />
       </motion.div>
 
-      {/* Decorative corner ornaments */}
-      <div className="absolute top-8 left-8 w-16 h-16 opacity-30">
-        <svg viewBox="0 0 60 60" fill="none">
-          <path d="M0 0 L60 0 L60 4 M0 0 L0 60 L4 60" stroke="#C9A84C" strokeWidth="1" />
-          <path d="M10 10 L20 10 M10 10 L10 20" stroke="#C9A84C" strokeWidth="0.5" />
-        </svg>
+      {/* Kyrgyz corner ornaments */}
+      <div className="absolute top-8 left-8 opacity-30 pointer-events-none">
+        <KyrgyzCorner />
       </div>
-      <div className="absolute top-8 right-8 w-16 h-16 opacity-30 scale-x-[-1]">
-        <svg viewBox="0 0 60 60" fill="none">
-          <path d="M0 0 L60 0 L60 4 M0 0 L0 60 L4 60" stroke="#C9A84C" strokeWidth="1" />
-          <path d="M10 10 L20 10 M10 10 L10 20" stroke="#C9A84C" strokeWidth="0.5" />
-        </svg>
+      <div className="absolute top-8 right-8 opacity-30 pointer-events-none">
+        <KyrgyzCorner flip />
       </div>
-      <div className="absolute bottom-8 left-8 w-16 h-16 opacity-30 scale-y-[-1]">
-        <svg viewBox="0 0 60 60" fill="none">
-          <path d="M0 0 L60 0 L60 4 M0 0 L0 60 L4 60" stroke="#C9A84C" strokeWidth="1" />
-          <path d="M10 10 L20 10 M10 10 L10 20" stroke="#C9A84C" strokeWidth="0.5" />
-        </svg>
+      <div className="absolute bottom-8 left-8 opacity-30 pointer-events-none" style={{ transform: 'scaleY(-1)' }}>
+        <KyrgyzCorner />
       </div>
-      <div className="absolute bottom-8 right-8 w-16 h-16 opacity-30 scale-x-[-1] scale-y-[-1]">
-        <svg viewBox="0 0 60 60" fill="none">
-          <path d="M0 0 L60 0 L60 4 M0 0 L0 60 L4 60" stroke="#C9A84C" strokeWidth="1" />
-          <path d="M10 10 L20 10 M10 10 L10 20" stroke="#C9A84C" strokeWidth="0.5" />
-        </svg>
+      <div className="absolute bottom-8 right-8 opacity-30 pointer-events-none" style={{ transform: 'scale(-1,-1)' }}>
+        <KyrgyzCorner />
+      </div>
+
+      {/* Floating rosettes */}
+      <div className="absolute left-6 top-1/2 -translate-y-1/2 pointer-events-none hidden md:block">
+        <KyrgyzRosette size={56} opacity={0.12} />
+      </div>
+      <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none hidden md:block">
+        <KyrgyzRosette size={56} opacity={0.12} />
       </div>
 
       <motion.div
         style={{ opacity }}
         className="relative z-10 text-center px-6 max-w-2xl mx-auto"
       >
-        {/* Small label */}
+        {/* Kyrgyz label */}
         <motion.p
           initial={{ opacity: 0, letterSpacing: '0.5em' }}
           whileInView={{ opacity: 1, letterSpacing: '0.6em' }}
           viewport={{ once: true }}
           transition={{ duration: 1.2 }}
-          className="font-sans text-gold/70 text-xs uppercase tracking-[0.5em] mb-8"
+          className="font-sans text-gold/70 text-xs uppercase tracking-[0.5em] mb-2"
         >
           Мы счастливы пригласить вас
         </motion.p>
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, delay: 0.1 }}
+          className="font-sans text-gold/40 text-[10px] uppercase tracking-[0.4em] mb-8"
+        >
+          Сизди чакырганыбызга бактыбыз
+        </motion.p>
 
-        {/* Decorative line */}
+        {/* Kyrgyz divider */}
         <motion.div
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.2 }}
-          className="section-divider mb-8"
-        />
+        >
+          <KyrgyzDivider className="mb-8" />
+        </motion.div>
 
         {/* Names */}
         <motion.h1
@@ -108,22 +115,32 @@ export default function Header() {
           <span className="gold-shimmer">Виктория</span>
         </motion.h1>
 
-        {/* Decorative line */}
+        {/* Kyrgyz divider */}
         <motion.div
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 1 }}
-          className="section-divider mt-8 mb-8"
-        />
+        >
+          <KyrgyzDivider className="mt-8 mb-8" />
+        </motion.div>
 
-        {/* Tagline */}
+        {/* Tagline Russian + Kyrgyz */}
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, delay: 1.1 }}
           className="font-serif italic text-white/60 text-xl"
+        >
+          «Сүйүү — мәңгү сапар экиөн»
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, delay: 1.2 }}
+          className="font-serif italic text-white/30 text-base mt-2"
         >
           «Любовь — это вечное путешествие вдвоём»
         </motion.p>

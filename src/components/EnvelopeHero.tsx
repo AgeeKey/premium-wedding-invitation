@@ -1,10 +1,15 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import { KyrgyzBorder, KyrgyzCorner, KyrgyzRosette } from './KyrgyzOrnament';
+
+// Mixkit free-to-use video (nature / romantic)
+const VIDEO_URL = 'https://assets.mixkit.co/videos/preview/mixkit-bride-and-groom-walk-and-turn-together-in-a-park-24757-large.mp4';
 
 export default function EnvelopeHero() {
   const [isOpen, setIsOpen] = useState(false);
   const [showContent, setShowContent] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   const fireConfetti = () => {
     const count = 200;
@@ -31,6 +36,8 @@ export default function EnvelopeHero() {
     setTimeout(() => {
       fireConfetti();
       setShowContent(true);
+      // Trigger music player
+      window.dispatchEvent(new CustomEvent('envelope-opened'));
     }, 800);
   };
 
@@ -45,31 +52,71 @@ export default function EnvelopeHero() {
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-luxury-black">
-      {/* Ambient background */}
-      <div className="absolute inset-0 pointer-events-none">
+      {/* Video background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <video
+          src={VIDEO_URL}
+          autoPlay
+          muted
+          loop
+          playsInline
+          onLoadedData={() => setVideoLoaded(true)}
+          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000"
+          style={{ opacity: videoLoaded ? 0.25 : 0 }}
+        />
+        {/* Dark overlay for text legibility */}
+        <div className="absolute inset-0 bg-luxury-black/70" />
+        {/* Parallax ambient glow */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gold/5 blur-[120px]" />
         <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full bg-gold/3 blur-[80px]" />
         <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-gold/3 blur-[80px]" />
       </div>
 
-      {/* Floating decorative elements */}
-      {[...Array(6)].map((_, i) => (
+      {/* Kyrgyz ornament borders */}
+      <div className="absolute top-0 left-0 right-0 pointer-events-none">
+        <KyrgyzBorder opacity={0.3} />
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 pointer-events-none rotate-180">
+        <KyrgyzBorder opacity={0.3} />
+      </div>
+
+      {/* Kyrgyz corner ornaments */}
+      <div className="absolute top-12 left-6 pointer-events-none">
+        <KyrgyzCorner opacity={0.35} />
+      </div>
+      <div className="absolute top-12 right-6 pointer-events-none">
+        <KyrgyzCorner opacity={0.35} flip />
+      </div>
+
+      {/* Floating Kyrgyz rosettes */}
+      {[
+        { x: '8%', y: '20%', size: 48, delay: 0 },
+        { x: '88%', y: '15%', size: 36, delay: 1 },
+        { x: '5%', y: '70%', size: 32, delay: 2 },
+        { x: '92%', y: '65%', size: 44, delay: 0.5 },
+      ].map((pos, i) => (
         <motion.div
           key={i}
+          className="absolute pointer-events-none"
+          style={{ left: pos.x, top: pos.y }}
+          animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
+          transition={{ duration: 6 + i, repeat: Infinity, delay: pos.delay, ease: 'easeInOut' }}
+        >
+          <KyrgyzRosette size={pos.size} opacity={0.2} />
+        </motion.div>
+      ))}
+
+      {/* Floating gold dots */}
+      {[...Array(6)].map((_, i) => (
+        <motion.div
+          key={`dot-${i}`}
           className="absolute w-1 h-1 rounded-full bg-gold/40"
           style={{
-            left: `${15 + i * 15}%`,
-            top: `${20 + (i % 3) * 25}%`,
+            left: `${15 + i * 14}%`,
+            top: `${25 + (i % 3) * 22}%`,
           }}
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.2, 0.6, 0.2],
-          }}
-          transition={{
-            duration: 4 + i,
-            repeat: Infinity,
-            delay: i * 0.5,
-          }}
+          animate={{ y: [0, -30, 0], opacity: [0.2, 0.6, 0.2] }}
+          transition={{ duration: 4 + i, repeat: Infinity, delay: i * 0.5 }}
         />
       ))}
 
@@ -80,7 +127,8 @@ export default function EnvelopeHero() {
         transition={{ duration: 1.2, delay: 0.3 }}
         className="mb-12 text-center"
       >
-        <p className="font-serif text-gold/70 text-sm tracking-[0.4em] uppercase mb-3">Premium Wedding Invitation</p>
+        <p className="font-serif text-gold/70 text-sm tracking-[0.4em] uppercase mb-1">Premium Wedding Invitation</p>
+        <p className="font-sans text-gold/40 text-xs tracking-[0.3em] uppercase mb-3">Той чакырыгы</p>
         <div className="section-divider" />
       </motion.div>
 
@@ -170,8 +218,8 @@ export default function EnvelopeHero() {
               className="absolute -top-4 left-4 right-4 glass-card rounded-sm p-5 text-center"
               style={{ boxShadow: '0 20px 60px rgba(201,168,76,0.2)' }}
             >
-              <p className="font-serif text-gold text-lg italic">Вы приглашены</p>
-              <p className="font-sans text-white/60 text-xs tracking-widest uppercase mt-1">на бракосочетание</p>
+              <p className="font-serif text-gold text-lg italic">Сиз чакырылдыңыз</p>
+              <p className="font-sans text-white/60 text-xs tracking-widest uppercase mt-1">Вы приглашены · на бракосочетание</p>
             </motion.div>
           )}
         </AnimatePresence>
@@ -192,7 +240,7 @@ export default function EnvelopeHero() {
                 animate={{ opacity: [0.4, 0.9, 0.4] }}
                 transition={{ duration: 2.5, repeat: Infinity }}
               >
-                Нажмите, чтобы открыть
+                Ачуу үчүн басыңыз · Нажмите, чтобы открыть
               </motion.p>
             </motion.div>
           ) : (
