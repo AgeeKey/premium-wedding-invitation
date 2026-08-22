@@ -11,6 +11,29 @@ import Location from './components/Location';
 import Countdown from './components/Countdown';
 import RSVP from './components/RSVP';
 import Footer from './components/Footer';
+import MusicPlayer from './components/MusicPlayer';
+
+// Color schemes: each overrides the two main accent hues via CSS custom properties.
+// Inspired by Kyrgyz traditional palette (crimson + gold) and Gen Z aesthetics.
+const COLOR_SCHEMES = [
+  // 1. Classic luxury gold (default)
+  { name: 'gold', primary: '#C9A84C', secondary: '#F0D060', dark: '#8B6914' },
+  // 2. Kyrgyz crimson + gold — ala-too mountain sunset
+  { name: 'kyrgyz', primary: '#C0392B', secondary: '#E74C3C', dark: '#922B21' },
+  // 3. Deep sapphire — mountain lakes of Issyk-Kul
+  { name: 'sapphire', primary: '#2980B9', secondary: '#5DADE2', dark: '#1A5276' },
+  // 4. Rose gold — modern feminine
+  { name: 'rose', primary: '#C47B8A', secondary: '#E8A0AF', dark: '#8E4B58' },
+  // 5. Emerald — Kyrgyz spring valleys
+  { name: 'emerald', primary: '#1E8449', secondary: '#52BE80', dark: '#145A32' },
+];
+
+function applyColorScheme(scheme: typeof COLOR_SCHEMES[number]) {
+  const root = document.documentElement;
+  root.style.setProperty('--color-accent', scheme.primary);
+  root.style.setProperty('--color-accent-light', scheme.secondary);
+  root.style.setProperty('--color-accent-dark', scheme.dark);
+}
 
 function SectionDivider() {
   return (
@@ -28,6 +51,12 @@ function SectionDivider() {
 export default function App() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+
+  // Randomize color scheme on each page load
+  useEffect(() => {
+    const scheme = COLOR_SCHEMES[Math.floor(Math.random() * COLOR_SCHEMES.length)];
+    applyColorScheme(scheme);
+  }, []);
 
   // Prevent default scroll restoration
   useEffect(() => {
@@ -57,6 +86,9 @@ export default function App() {
           />
         ))}
       </nav>
+
+      {/* Floating music player */}
+      <MusicPlayer />
 
       <main>
         {/* Hero envelope */}
