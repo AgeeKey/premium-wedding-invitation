@@ -35,10 +35,11 @@ export default function EnvelopeHero() {
   };
 
   useEffect(() => {
+    if (!showContent) return;
     const timer = setTimeout(() => {
       const el = document.getElementById('invitation-content');
       if (el) el.scrollIntoView({ behavior: 'smooth' });
-    }, showContent ? 1200 : 99999);
+    }, 1200);
     return () => clearTimeout(timer);
   }, [showContent]);
 

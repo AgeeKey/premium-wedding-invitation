@@ -127,12 +127,11 @@ export default function Location() {
             </div>
 
             <motion.a
-              href="https://maps.google.com"
+              href="https://maps.google.com/?q=Тверская+ул.,+15,+Москва"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ y: -2 }}
               className="inline-flex items-center gap-2 btn-gold"
-              onClick={(e) => e.preventDefault()}
             >
               <Navigation size={16} />
               <span>Построить маршрут</span>
