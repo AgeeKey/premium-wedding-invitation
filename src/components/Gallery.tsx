@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ZoomIn, ChevronLeft, ChevronRight } from 'lucide-react';
 import { KyrgyzDivider, KyrgyzCorner } from './KyrgyzOrnament';
@@ -71,6 +71,23 @@ export default function Gallery() {
     setSelected(photos[next].id);
   };
 
+  useEffect(() => {
+    if (selected === null) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelected(null);
+      } else if (e.key === 'ArrowLeft') {
+        const next = (selectedIdx - 1 + photos.length) % photos.length;
+        setSelected(photos[next].id);
+      } else if (e.key === 'ArrowRight') {
+        const next = (selectedIdx + 1 + photos.length) % photos.length;
+        setSelected(photos[next].id);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selected, selectedIdx]);
+
   return (
     <section className="relative py-24 px-6 overflow-hidden">
       {/* Kyrgyz ornament accents */}
@@ -106,7 +123,16 @@ export default function Gallery() {
               transition={{ duration: 0.6, delay: i * 0.07 }}
               whileHover={{ scale: 1.03 }}
               onClick={() => setSelected(photo.id)}
-              className="relative aspect-square rounded-sm overflow-hidden cursor-pointer group"
+              onKeyDown={e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setSelected(photo.id);
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label={`View photo: ${photo.labelRu}`}
+              className="relative aspect-square rounded-sm overflow-hidden cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
               style={{ border: '1px solid rgba(201,168,76,0.12)' }}
             >
               {/* Real photo */}
@@ -187,7 +213,7 @@ export default function Gallery() {
                 {/* Nav buttons */}
                 <button
                   onClick={() => navPhoto(-1)}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                   style={{ background: 'rgba(201,168,76,0.2)', border: '1px solid rgba(201,168,76,0.4)' }}
                   aria-label="Previous photo"
                 >
@@ -195,7 +221,7 @@ export default function Gallery() {
                 </button>
                 <button
                   onClick={() => navPhoto(1)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                   style={{ background: 'rgba(201,168,76,0.2)', border: '1px solid rgba(201,168,76,0.4)' }}
                   aria-label="Next photo"
                 >
@@ -204,9 +230,9 @@ export default function Gallery() {
 
                 <button
                   onClick={() => setSelected(null)}
-                  className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center"
+                  className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                   style={{ background: 'rgba(201,168,76,0.2)', border: '1px solid rgba(201,168,76,0.4)' }}
-                  aria-label="Close"
+                  aria-label="Close photo preview"
                 >
                   <X className="text-gold" size={16} />
                 </button>
